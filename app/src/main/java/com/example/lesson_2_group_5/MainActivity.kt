@@ -2,6 +2,10 @@ package com.example.lesson_2_group_5
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +16,11 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity() {
     // Свойство, хранящее значение того было ли показано всплывающее сообщение
     private var showToast: Boolean = false
+
+    // Метод, который будет вызываться при нажатии на кнопку через xml
+    fun clickButton(view: View) {
+        Toast.makeText(this, "Кнопка нажата", Toast.LENGTH_LONG).show()
+    }
 
     // Метод onCreate - запускается самым при старте активности, или после вызова onPause/onStop
     // Создает объекты пользовательского интерфейса перед показом пользователю
@@ -55,6 +64,39 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Привет пользователь!", Toast.LENGTH_LONG).show()
             showToast = true
         }
+
+        // Создание объектов элементов пользовательского интерфейса
+        val textView7: TextView = findViewById(R.id.textView7)
+        val textView: TextView = findViewById(R.id.textView)
+        val button = findViewById<Button>(R.id.button)
+        val imageView = findViewById<ImageView>(R.id.imageView)
+        val imageView2 = findViewById<ImageView>(R.id.imageView2)
+
+        // Взаимодействие с объектами интерфейса
+
+        // Изменение значение текста в текстовом поле
+        textView7.text = "New text in onCreate() method!"
+        textView.setText("My new text in onCreate() method!")
+
+        // Обработка нажатий на кнопку
+        // Слушатель нажатий однократный
+        button.setOnClickListener {
+            button.text = "Click!"
+        }
+
+        // Слушатель нажатий, который срабатывает при удержании
+        button.setOnLongClickListener {
+            button.text = "Long click!"
+            return@setOnLongClickListener true
+        }
+
+        // Слушатель нажатий на тексте
+        textView7.setOnClickListener {
+            textView7.text = "Click!"
+        }
+
+        // Смена изображения в картинке
+        imageView.setImageResource(R.drawable.ic_launcher_background)
     }
 
     // Метод onStart - запускается после onCreate
