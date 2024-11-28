@@ -12,6 +12,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.example.lesson_2_group_5.databinding.ActivityMainBinding
 
 // Класс MainActivity, наследник AppCompatActivity
@@ -27,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     // Свойство, для использования библиотеки viewBinding
     private lateinit var activityMainBinding: ActivityMainBinding
 
+    // Свойство, отвечающее за работу с ViewModel
+    private lateinit var mainViewModel: MainViewModel
+
     // Метод onCreate - запускается самым при старте активности, или после вызова onPause/onStop
     // Создает объекты пользовательского интерфейса перед показом пользователю
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         // Инициализация свойства activityMainBinding
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+
+        // Инициализация MainViewModel
+        val viewModelProvider = ViewModelProvider(this)
+        mainViewModel = viewModelProvider[MainViewModel::class.java]
 
         // Проврка существования Bundle хранилища
         if (savedInstanceState != null)
@@ -139,6 +148,24 @@ class MainActivity : AppCompatActivity() {
         )
         // Передача созданного адаптера в выпадающий список
         activityMainBinding.spinner.adapter = spinnerAdapter
+
+        // Создание наблюдателя за свойстом editText
+        mainViewModel.getEditText().observe(this) {
+            Log.i("ИЗМЕНЕНО", it.toString())
+            activityMainBinding.textView.text = it.toString()
+        }
+
+        // Слушатель введенного в поле для ввода текста
+        activityMainBinding.editTextText.addTextChangedListener {
+            // Изменение значения свойства editText
+            mainViewModel.getEditText().value = it.toString()
+        }
+
+        // Работа с ресурсами в коде
+        activityMainBinding.button3.setOnClickListener {
+            activityMainBinding.button3.text = getString(R.string.new_string)
+            activityMainBinding.button3.setBackgroundColor(getColor(R.color.color1))
+        }
     }
 
     // Метод onStart - запускается после onCreate
